@@ -38,8 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'users',
     'task_manager',
+    'users',
     'tasks',
 )
 
