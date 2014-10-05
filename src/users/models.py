@@ -27,12 +27,12 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    first_name = models.CharFields(
+    first_name = models.CharField(
         verbose_name='first name',
         max_length=50,
         blank=True
     )
-    last_name = models.CharFields(
+    last_name = models.CharField(
         verbose_name='last name',
         max_length=50,
         blank=True
@@ -50,7 +50,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     def get_full_name(self):
-        return '{0} {1}'.format(self.first_name, self.last_name)
+        return u'{0} {1}'.format(self.first_name, self.last_name)
 
     def get_short_name(self):
         return self.last_name
