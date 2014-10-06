@@ -11,6 +11,5 @@ class TaskCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        import ipdb; ipdb.set_trace()
 
         return super(TaskCreate, self).form_valid(form)
