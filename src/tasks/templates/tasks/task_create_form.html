@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load bootstrap_tags %}
+
+{% block title %}Create new task{% endblock %}
+
+{% block content %}
+    <legend>Create new task</legend>
+    <form  action="{% url 'tasks:new_task' %}" method="post">{% csrf_token %}
+        {{ form|as_bootstrap }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#id_due_date').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            autoclose: true
+        });
+    });
+</script>
+
+{% endblock %}

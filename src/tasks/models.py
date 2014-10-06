@@ -28,6 +28,9 @@ class Task(models.Model):
     def __unicode__(self):
         return u'{0} {1}'.format(self.pk, self.title)
 
+    def get_absolute_url(self):
+        pass
+
     def clean(self):
         if self.due_date <= self.created_at:
             raise ValidationError('due date must be greater than current time')
