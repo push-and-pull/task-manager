@@ -31,4 +31,22 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError('Password and Confirm password should be equal')
 
 
+class UserLoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("email", "password")
+        widgets = {'password': forms.PasswordInput()}
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        try:
+            User.objects.get(email=data)
+        except User.DoesNotExist:
+            raise forms.ValidationError('User with this email does not exist')
+        else:
+            return data
+
+    def clean(self):
+        data = self.cleaned_data
+        return data
 
