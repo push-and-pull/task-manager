@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 
 from tasks.models import Task
 
@@ -13,3 +14,10 @@ class TaskCreate(CreateView):
         form.instance.created_by = self.request.user
 
         return super(TaskCreate, self).form_valid(form)
+
+
+class TaskList(ListView):
+    context_object_name = 'task_list'
+
+    def get_queryset(self):
+        return Task.objects.filter(created_by=self.request.user.pk)

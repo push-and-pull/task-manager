@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load bootstrap_tags %}
+
+{% block title %}My tasks{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">My tasks</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Created at</th>
+                <th>Due date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in task_list %}
+                <tr>
+                    <td>{{ task.pk }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.created_at }}</td>
+                    <td>{{ task.due_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
