@@ -23,7 +23,7 @@ class Task(models.Model):
     status = models.IntegerField(choices=TASK_STATUS.VALUES.items())
 
     created_at = models.DateTimeField(auto_now_add=True)
-    due_date = models.DateTimeField()
+    due_date = models.DateField()
 
     def __unicode__(self):
         return u'{0} {1}'.format(self.pk, self.title)

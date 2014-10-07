@@ -16,11 +16,11 @@
 {% block scripts %}
 <script>
     $(document).ready(function () {
-        $('#id_due_date').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
+        $('#id_due_date').datepicker({
+            format: 'mm/dd/yyyy',
             autoclose: true,
-            pickerPosition: 'top-left',
-            minuteStep: 30
+            startDate: '+1d',
+            todayBtn: true
         });
     });
 </script>
