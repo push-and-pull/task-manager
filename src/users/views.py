@@ -3,7 +3,7 @@
 from models import User
 from forms import UserRegisterForm, UserLoginForm
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 def user_register(request):
@@ -30,7 +30,7 @@ def user_login(request):
         form = UserLoginForm(request.POST)
         if form.is_valid():
             user = authenticate(email=form['email'].value(), password=form['password'].value())
-            if user.is_active:
+            if user is not None:
                 login(request, user)
                 return HttpResponseRedirect('/tasks')
             else:
@@ -44,3 +44,8 @@ def user_login(request):
         return render(request, "sign_in.html", {
             "form": form,
         })
+
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/user/login')
