@@ -52,3 +52,5 @@ class UserLogInTestCase(TestCase):
     def test_user_with_valid_data_is_logged_in(self):
         self.client.post('/user/login', data=self.valid_data)
         self.assertEqual(self.client.session['_auth_user_id'], self.user.pk)
+
+        
