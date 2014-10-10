@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load bootstrap_tags %}
+
+{% block title %}Create new task{% endblock %}
+
+{% block content %}
+    <legend>{% block header %}{% endblock %}</legend>
+    <form  action="." method="post">{% csrf_token %}
+        {{ form|as_bootstrap }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#id_due_date').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true,
+            startDate: '+1d',
+            todayBtn: true
+        });
+    });
+</script>
+
+{% endblock %}
