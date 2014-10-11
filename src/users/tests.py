@@ -1,7 +1,6 @@
 from django.test import TestCase
 from models import User
 from forms import UserRegisterForm, UserLoginForm
-from django.test import Client
 
 
 class UserRegisterTestCase(TestCase):
@@ -12,8 +11,12 @@ class UserRegisterTestCase(TestCase):
         self.data_for_password_ne_confirm = {'email': 'some@email.com', 'password': 'pass', 'confirm_password': 'other'}
         self.data_valid = {'email': 'some@email.com', 'password': 'pass', 'confirm_password': 'pass'}
 
+    def tearDown(self):
+        user = self.user
+        user.delete()
+
     def test_request_form_existing_email(self):
-        response = self.client.post('/user/sign_in', self.data_for_existing_user)
+        response = self.client.post('/user/sign_up', self.data_for_existing_user)
         self.assertFormError(response, 'form', 'email', 'User with this email already exists')
 
     def test_form_existing_email(self):
@@ -30,11 +33,11 @@ class UserRegisterTestCase(TestCase):
 
     def test_form_valid_data_adds_user(self):
         initial_count = User.objects.count()
-        self.client.post('/user/sign_in', self.data_valid)
+        self.client.post('/user/sign_up', self.data_valid)
         self.assertEqual(User.objects.count(), initial_count + 1)
 
     def test_form_valid_data_redirects_to_tasks_page(self):
-        response = self.client.post('/user/sign_in', self.data_valid)
+        response = self.client.post('/user/sign_up', self.data_valid)
         #fixme redirect should be tested not in that cheated way.
         self.assertIn('/tasks', response.url)
 
@@ -44,6 +47,12 @@ class UserLogInTestCase(TestCase):
         user = User.objects.create_user(email='user@mail.ru', password='secret')
         self.user = user
         self.valid_data = {'email': self.user.email, 'password': 'secret'}
+        self.wrong_password_user = {'email': self.user.email, 'password': 'some'}
+        self.not_existing_user = {'email': 'some@email.com', 'password': 'some'}
+
+    def tearDown(self):
+        self.user.delete()
+        self.client.logout()
 
     def test_form_validates_valid_data(self):
         form = UserLoginForm(data=self.valid_data)
@@ -53,4 +62,24 @@ class UserLogInTestCase(TestCase):
         self.client.post('/user/login', data=self.valid_data)
         self.assertEqual(self.client.session['_auth_user_id'], self.user.pk)
 
-        
+    def test_not_existing_user_not_logged_in(self):
+        form = UserLoginForm(data=self.not_existing_user)
+        self.assertFalse(form.is_valid())
+
+    def test_user_with_wrong_password(self):
+        self.client.post('/user/login', data=self.wrong_password_user)
+        self.assertEqual(self.client.session.get('_auth_user_id', 'No user here'), 'No user here')
+
+
+class UserLogoutTestCase(TestCase):
+    def setUp(self):
+        self.valid_data = dict(email='user@mail.ru', password='secret')
+        user = User.objects.create_user(**self.valid_data)
+        self.user = user
+        self.client.post('/user/login', data=self.valid_data)
+
+    def test_user_logout(self):
+        user_id_before = self.client.session.get('_auth_user_id', 'No user here')
+        self.client.get('/user/logout')
+        user_id_after = self.client.session.get('_auth_user_id', 'No user here')
+        self.assertNotEqual(user_id_before, user_id_after)

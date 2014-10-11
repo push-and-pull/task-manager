@@ -10,7 +10,7 @@ def user_register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if not form.is_valid():
-            return render(request, "sign_in.html", {
+            return render(request, "sign_up_or_login.html", {
                 "form": form,
             })
         else:
@@ -20,7 +20,7 @@ def user_register(request):
             return HttpResponseRedirect('/tasks')
     else:
         form = UserRegisterForm()
-        return render(request, "sign_in.html", {
+        return render(request, "sign_up_or_login.html", {
             "form": form,
         })
 
@@ -34,16 +34,20 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/tasks')
             else:
-                return render(request, "sign_in.html", {'form': form})
+                return render(request, "sign_up_or_login.html", {'form': form})
         else:
-            return render(request, "sign_in.html", {
+            return render(request, "sign_up_or_login.html", {
                 "form": form,
             })
     else:
-        form = UserLoginForm()
-        return render(request, "sign_in.html", {
-            "form": form,
-        })
+        user = request.user
+        if not user.is_active:
+            form = UserLoginForm()
+            return render(request, "sign_up_or_login.html", {
+                "form": form,
+            })
+        else:
+            return HttpResponseRedirect('/tasks')
 
 
 def user_logout(request):
