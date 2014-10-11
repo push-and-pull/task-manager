@@ -3,12 +3,12 @@
 {% block title %} Register new user {% endblock %}
 
 {% block content %}
-        {% load bootstrap_tags %}
-        <form method="post" action="">
-            {% csrf_token %}
-            {{ form|as_bootstrap }}
-            <p>
-                <button type="submit">Submit</button>
-            </p>
-        </form>
+    {% load bootstrap_tags %}
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form|as_bootstrap }}
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
 {% endblock %}

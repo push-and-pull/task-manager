@@ -9,7 +9,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "password", "confirm_password")
+        fields = ('first_name', 'last_name', 'email', 'password', 'confirm_password')
         widgets = {
             'password': forms.PasswordInput(),
         }
@@ -33,7 +33,7 @@ class UserRegisterForm(forms.ModelForm):
 class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("email", "password")
+        fields = ('email', 'password')
         widgets = {'password': forms.PasswordInput()}
 
     def clean_email(self):
