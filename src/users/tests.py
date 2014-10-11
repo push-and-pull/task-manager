@@ -77,6 +77,9 @@ class UserLogoutTestCase(TestCase):
         user = User.objects.create_user(**self.valid_data)
         self.user = user
         self.client.post('/user/login', data=self.valid_data)
+    
+    def tearDonw(self):
+        self.user.delete()
 
     def test_user_logout(self):
         user_id_before = self.client.session.get('_auth_user_id', 'No user here')
