@@ -41,7 +41,7 @@ def user_login(request):
             })
     else:
         user = request.user
-        if not user.is_active:
+        if user.is_anonymous():
             form = UserLoginForm()
             return render(request, "sign_up_or_login.html", {
                 "form": form,
