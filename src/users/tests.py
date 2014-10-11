@@ -46,7 +46,7 @@ class UserRegisterTestCase(TestCase):
 class UserLogInTestCase(TestCase):
     def setUp(self):
         self.valid_data = {'email': 'user@email.com', 'password': 'secret'}
-        self.user = User.objects.create(**self.valid_data)
+        self.user = User.objects.create_user(**self.valid_data)
         self.wrong_password_user = {'email': self.user.email, 'password': 'some'}
         self.not_existing_user = {'email': 'some@email.com', 'password': 'some'}
 
