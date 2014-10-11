@@ -24,7 +24,12 @@
                     <li><a href="{% url 'tasks:new_task' %}">Create task</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">logout</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:logout' %}">logout</a></li>
+                    {% else %}
+                    <li><a href="{% url 'users:sign_up' %}">Sign up</a></li>
+                    <li><a href="{% url 'users:login' %}">Log in</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
