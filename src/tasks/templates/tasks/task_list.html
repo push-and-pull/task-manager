@@ -11,8 +11,8 @@
             <tr>
                 <th>#</th>
                 <th>Title</th>
-                <th>Created at</th>
-                <th>Due date</th>
+                <th><a href="{% url 'tasks:task_list' %}?order_by=created_at">Created at</a></th>
+                <th><a href="{% url 'tasks:task_list' %}?order_by=due_date">Due date</a></th>
             </tr>
         </thead>
         <tbody>
