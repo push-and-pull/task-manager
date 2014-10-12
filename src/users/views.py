@@ -18,7 +18,7 @@ def user_register(request):
             data = form.cleaned_data
             del data['confirm_password']
             User.objects.create_user(**data)
-            return HttpResponseRedirect(reverse('tasks:my_tasks'))
+            return HttpResponseRedirect(reverse('users:login'))
     else:
         form = UserRegisterForm()
         return render(request, 'sign_up_or_login.html', {
@@ -33,7 +33,7 @@ def user_login(request):
             user = authenticate(email=form['email'].value(), password=form['password'].value())
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('tasks:my_tasks'))
+                return HttpResponseRedirect(reverse('tasks:task_list'))
             else:
                 return render(request, 'sign_up_or_login.html', {'form': form})
         else:
@@ -48,7 +48,7 @@ def user_login(request):
                 'form': form,
             })
         else:
-            return HttpResponseRedirect(reverse('tasks:my_tasks'))
+            return HttpResponseRedirect(reverse('tasks:task_list'))
 
 
 def user_logout(request):

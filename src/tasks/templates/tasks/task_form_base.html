@@ -6,7 +6,7 @@
 
 {% block content %}
     <legend>{% block header %}{% endblock %}</legend>
-    <form  action="." method="post">{% csrf_token %}
+    <form  action="" method="post">{% csrf_token %}
         {{ form|as_bootstrap }}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
