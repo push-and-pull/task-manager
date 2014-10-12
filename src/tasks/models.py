@@ -1,6 +1,7 @@
 # coding: utf-8
-from django.db import models
+from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils import timezone
 
 from users.models import User
@@ -29,9 +30,9 @@ class Task(models.Model):
         return u'{0} {1}'.format(self.pk, self.title)
 
     def get_absolute_url(self):
-        pass
+        return reverse('tasks:task_detail', self.pk)
 
     def clean(self):
 
-        if self.due_date <= timezone.now():
+        if self.due_date <= timezone.now().date():
             raise ValidationError('due date must be greater than current time')
