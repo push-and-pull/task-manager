@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %} Register new user {% endblock %}
+{% block title %} Register new user{% endblock %}
 
 {% block content %}
     {% load bootstrap_tags %}
     <form method="post" action="">
         {% csrf_token %}
         {{ form|as_bootstrap }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}

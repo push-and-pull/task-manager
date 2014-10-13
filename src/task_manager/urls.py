@@ -1,5 +1,10 @@
+# coding: utf-8
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import patterns, include, url
-from django.contrib import admin
+from django.conf import settings
+
+# from django.contrib import admin
 
 urlpatterns = patterns(
     '',
@@ -11,3 +16,9 @@ urlpatterns = patterns(
     url(r'^tasks/', include('tasks.urls', namespace='tasks')),
     url(r'^user/', include('users.urls', namespace='users')),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns(
+        'django.contrib.staticfiles.views',
+        url(r'^static/(?P<path>.*)$', 'serve'),
+    )

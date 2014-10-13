@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Task detail{% endblock %}
+
+{% block content %}
+    <h2>{{ task.title }}</h2>
+    <div class="col-md-9">
+        <h4>Description:</h4>
+        <pre>{{ task.description }}</pre>
+    </div>
+    <div class="col-md-3">
+        <h4>Created at</h4>
+        <p class="text-primary">{{ task.created_at }}</p>
+        <h4>Due date</h4>
+        <p class="text-primary">{{ task.due_date }}</p>
+        <h4>Created by</h4>
+        <p class="text-primary">{{ task.created_by.email}}</p>
+        <hr>
+        <a href="{% url 'tasks:task_edit' task.pk %}" class="btn btn-primary">Edit task</a>
+    </div>
+{% endblock %}

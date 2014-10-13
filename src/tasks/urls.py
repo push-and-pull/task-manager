@@ -1,9 +1,14 @@
 # coding: utf-8
 
 from django.conf.urls import patterns, url
-from django.views.generic import TemplateView
+
+from tasks.views import TaskCreate, TaskList, TaskEdit, TaskDetail
+
 
 urlpatterns = patterns(
     '',
-    url('^$', TemplateView.as_view(template_name='index.html'), name='my_tasks')
+    url('^$', TaskList.as_view(), name='task_list'),
+    url(r'^new$', TaskCreate.as_view(), name='task_new'),
+    url(r'^(?P<pk>\d+)/edit$', TaskEdit.as_view(), name='task_edit'),
+    url(r'^(?P<pk>\d+)$', TaskDetail.as_view(), name='task_detail'),
 )

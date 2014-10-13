@@ -16,4 +16,9 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(auto_now_add=True),
         ),
+        migrations.AlterField(
+            model_name='task',
+            name='due_date',
+            field=models.DateField(),
+        ),
     ]
