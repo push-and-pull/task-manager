@@ -43,11 +43,11 @@ class TaskList(ListView, LoginRequiredMixin):
         'due_date': '-due_date',
         'created_at': '-created_at'
     }
-    DEFALT_ORDER = 'pk'
+    DEFAULT_ORDER = 'pk'
 
     def get_queryset(self):
         order = self.request.GET.get('order_by')
-        order_by = self.ORDER_BY.get(order, self.DEFALT_ORDER)
+        order_by = self.ORDER_BY.get(order, self.DEFAULT_ORDER)
         queryset = Task.objects.filter(created_by=self.request.user.pk).order_by(order_by)
         return queryset
 
