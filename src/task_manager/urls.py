@@ -14,7 +14,7 @@ urlpatterns = patterns(
 
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasks.urls', namespace='tasks')),
-    url(r'^tasks/by_tag', include('tags.urls', namespace='tasks')),
+    url(r'^tasks/by_tag/', include('tags.urls', namespace='tasks')),
     url(r'^user/', include('users.urls', namespace='users')),
 )
 

@@ -32,7 +32,7 @@ class TaskCreate(CreateView, LoginRequiredMixin):
 
 class TaskEdit(UpdateView, LoginRequiredMixin):
     model = Task
-    fields = ('title', 'description', 'status', 'due_date')
+    fields = ('title', 'description', 'status', 'due_date',)
     template_name_suffix = '_create_form'
 
 

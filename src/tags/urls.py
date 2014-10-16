@@ -7,5 +7,5 @@ from tags.views import TaskListByTag
 
 urlpatterns = patterns(
     '',
-    url(r'^(?P<tag_name>\w)$', TaskListByTag.as_view(), name='task_detail'),
+    url(r'^(?P<tag_name>\w+)$', TaskListByTag.as_view(), name='by_tag'),
 )
