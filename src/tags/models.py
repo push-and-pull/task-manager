@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 
 class Tag(models.Model):
-    title = models.CharField(unique=True)
+    title = models.CharField(unique=True, max_length=100)
     task_list = models.ManyToManyField(Task)
 
     def __unicode__(self):

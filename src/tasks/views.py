@@ -32,8 +32,11 @@ class TaskCreate(CreateView, LoginRequiredMixin):
 
 class TaskEdit(UpdateView, LoginRequiredMixin):
     model = Task
-    fields = ('title', 'description', 'status', 'due_date',)
+    fields = ('title', 'description', 'status', 'due_date')
     template_name_suffix = '_create_form'
+
+    def get_success_url(self):
+        return reverse('tasks:task_list')
 
 
 class TaskList(ListView, LoginRequiredMixin):
