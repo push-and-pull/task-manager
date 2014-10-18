@@ -26,6 +26,31 @@ class BaseTestCase(TestCase):
             self.assertEqual(getattr(obj, attr), value)
 
 
+class TaskDetailTests(BaseTestCase):
+    def setUp(self):
+        super(TasksListTests, self).setUp()
+        self.task = Task.object.create(
+            title='New task',
+            created_by=self.user,
+            due_date=datetime.datetime.now().date()
+        )
+
+        self.other_task = Task.object.create(
+            title='New task',
+            created_by=self.User.objects.create_user(email='foo@baz.bar', password='12345'),
+            due_date=datetime.datetime.now().date()
+        )
+
+    def test_task_detail(self):
+        response = self.client.get(reverse('tasks:task_detail', self.task.pk))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'tasks/task_detail.html')
+
+    def test_try_to_see_other_user_task(self):
+        response = self.client.get(reverse('tasks:task_detail', self.task.pk))
+        self.assertEqual(response.status_code, 403)
+
+
 class TasksListTests(BaseTestCase):
 
     def setUp(self):
@@ -64,7 +89,7 @@ class TasksListTests(BaseTestCase):
         response = self.client.get(reverse('tasks:task_list'))
         self.assertRedirects(response, reverse('users:login') + '?next=/tasks/')
 
-    def test_quries_count(self):
+    def test_queries_count(self):
         with self.assertNumQueries(2):
             self.client.get(reverse('tasks:task_list'))
 
