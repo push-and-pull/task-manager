@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView, DetailView
+from tasks.forms import TaskCreateForm
 
 from tasks.models import Task
 
@@ -18,7 +19,8 @@ class LoginRequiredMixin(object):
 
 class TaskCreate(CreateView, LoginRequiredMixin):
     model = Task
-    fields = ('title', 'description', 'status', 'due_date')
+    form_class = TaskCreateForm
+
     template_name_suffix = '_create_form'
 
     def get_success_url(self):
@@ -53,7 +55,6 @@ class TaskList(ListView, LoginRequiredMixin):
         order_by = self.ORDER_BY.get(order, self.DEFAULT_ORDER)
         queryset = Task.objects.filter(created_by=self.request.user.pk).order_by(order_by)
         return queryset
-
 
 class TaskDetail(DetailView, LoginRequiredMixin):
     model = Task

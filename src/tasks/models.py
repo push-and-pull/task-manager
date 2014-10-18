@@ -36,3 +36,14 @@ class Task(models.Model):
 
         if self.due_date <= timezone.now().date():
             raise ValidationError('due date must be greater than current time')
+
+
+class Tag(models.Model):
+    title = models.CharField(unique=True, max_length=100)
+    task_list = models.ManyToManyField(Task)
+
+    def __unicode__(self):
+        return u'{0} {1}'.format(self.pk, self.title)
+
+    def get_absolute_url(self):
+        return reverse('tasks:by_tag', self.title)
