@@ -33,6 +33,5 @@ class Task(models.Model):
         return reverse('tasks:task_detail', self.pk)
 
     def clean(self):
-
         if self.due_date <= timezone.now().date():
             raise ValidationError('due date must be greater than current time')

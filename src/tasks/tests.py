@@ -8,7 +8,7 @@ from users.models import User
 from tasks.models import Task
 
 
-class TestCaseWithUser(TestCase):
+class BaseTestCase(TestCase):
     user_data = {
         'email': 'foo@bar.com',
         'password': '12345'
@@ -21,12 +21,12 @@ class TestCaseWithUser(TestCase):
     def tearDown(self):
         User.objects.all().delete()
 
+    def assertObjectAttrs(self, obj, **attrs):
+        for attr, value in attrs.items():
+            self.assertEqual(getattr(obj, attr), value)
 
-class TasksListTests(TestCaseWithUser):
-    user_data = {
-        'email': 'foo@bar.com',
-        'password': '12345'
-    }
+
+class TasksListTests(BaseTestCase):
 
     def setUp(self):
         super(TasksListTests, self).setUp()
@@ -73,10 +73,35 @@ class TasksListTests(TestCaseWithUser):
         self.assertNotContains(response, self.task3.title)
 
 
-class CreateTaskTest(TestCaseWithUser):
+class CreateTaskTest(BaseTestCase):
 
     def setUp(self):
         super(CreateTaskTest, self).setUp()
 
     def tearDown(self):
         super(CreateTaskTest, self).tearDown()
+        Task.objects.all().delete()
+
+    def get_task_data(self, **kwargs):
+        task_data = {
+            'title': 'New task',
+            'description': 'test',
+            'status': Task.TASK_STATUS.OPEN,
+            'due_date': '10/29/2014',
+        }
+        task_data.update(kwargs)
+        return task_data
+
+    def test_create(self):
+        task_data = self.get_task_data()
+        response = self.client.post(reverse('tasks:task_new'), task_data)
+        self.assertRedirects(response, reverse('tasks:task_list'))
+        self.assertEqual(Task.objects.count(), 1)
+        task = Task.objects.first()
+        self.assertObjectAttrs(
+            task,
+            title=task_data['title'],
+            description=task_data['description'],
+            status=task_data['status'],
+            due_date=datetime.date(2014, 10, 29)
+        )
