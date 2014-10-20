@@ -30,13 +30,16 @@ class TaskCreate(CreateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-
+        self.object = form.save()
+        for tag_title in form.cleaned_data['tag_set']:
+            self.object.tag_set.add(Tag.objects.get(title=tag_title))
+        self.object.save()
         return super(TaskCreate, self).form_valid(form)
 
 
 class TaskEdit(UpdateView, LoginRequiredMixin):
     model = Task
-    fields = ('title', 'description', 'status', 'due_date')
+    form_class = TaskCreateForm
     template_name_suffix = '_create_form'
 
     def get_success_url(self):
