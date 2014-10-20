@@ -41,7 +41,7 @@ class TaskCreate(CreateView, LoginRequiredMixin):
         return super(TaskCreate, self).form_valid(form)
 
 
-class TaskEdit(UpdateView, LoginRequiredMixin):
+class TaskEdit(UpdateView, UserSpecificTaskView):
     model = Task
     fields = ('title', 'description', 'status', 'due_date')
     template_name_suffix = '_create_form'

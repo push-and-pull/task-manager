@@ -154,6 +154,13 @@ class EditTaskTests(BaseTestCase):
             due_date=datetime.datetime.now()
         )
 
+        self.other_task = Task.objects.create(
+            title='Other task',
+            created_by=User.objects.create_user(email='foo@baz.bar', password='12345'),
+            status=Task.TASK_STATUS.OPEN,
+            due_date=datetime.datetime.now().date()
+        )
+
     def tearDown(self):
         super(EditTaskTests, self).tearDown()
         Task.objects.all().delete()
@@ -182,3 +189,8 @@ class EditTaskTests(BaseTestCase):
             status=task_data['status'],
             due_date=datetime.date(2014, 10, 29)
         )
+
+    def test_user_cannot_edit_oether_user_task(self):
+        url = reverse('tasks:task_edit', args=(self.other_task.pk,))
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
