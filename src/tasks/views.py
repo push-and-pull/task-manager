@@ -30,10 +30,17 @@ class TaskCreate(CreateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
+        #fixme check if there is self.object before line 34
         self.object = form.save()
         for tag_title in form.cleaned_data['tag_set']:
-            self.object.tag_set.add(Tag.objects.get(title=tag_title))
+            try:
+                tag_object = Tag.objects.get(title=tag_title)
+            except Tag.DoesNotExist:
+                tag_object = Tag(title=tag_title)
+                tag_object.save()
+            self.object.tag_set.add(tag_object)
         self.object.save()
+        #fixme check what returns
         return super(TaskCreate, self).form_valid(form)
 
 
@@ -44,6 +51,29 @@ class TaskEdit(UpdateView, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse('tasks:task_list')
+
+    def get_initial(self):
+        initial = super(UpdateView, self).get_initial()
+        existing_tag_set = self.object.tag_set.all()
+        tag_list = list()
+        for tag in existing_tag_set:
+            tag_list.append(tag.title)
+        tag_list.sort()
+        initial['tag_set'] = ', '.join(tag_list)
+        return initial
+
+    def form_valid(self, form):
+        self.object.tag_set.clear()
+        for tag_title in form.cleaned_data['tag_set']:
+            try:
+                tag_object = Tag.objects.get(title=tag_title)
+            except Tag.DoesNotExist:
+                tag_object = Tag(title=tag_title)
+                tag_object.save()
+            self.object.tag_set.add(tag_object)
+        self.object.save()
+        #fixme check what returns
+        return super(TaskEdit, self).form_valid(form)
 
 
 class TaskList(ListView, LoginRequiredMixin):
