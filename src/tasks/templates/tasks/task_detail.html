@@ -16,6 +16,6 @@
         <h4>Created by</h4>
         <p class="text-primary">{{ task.created_by.email}}</p>
         <hr>
-        <a href="{% url 'tasks:task_edit' task.id %}" class="btn btn-primary">Edit task</a>
+        <a href="{% url 'tasks:task_edit' task.pk %}" class="btn btn-primary">Edit task</a>
     </div>
 {% endblock %}
