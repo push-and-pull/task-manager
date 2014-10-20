@@ -6,8 +6,10 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView, DetailView
 from tasks.forms import TaskCreateForm
+import ipdb
 
-from tasks.models import Task
+
+from tasks.models import Task, Tag
 
 
 class LoginRequiredMixin(object):
@@ -55,6 +57,32 @@ class TaskList(ListView, LoginRequiredMixin):
         order_by = self.ORDER_BY.get(order, self.DEFAULT_ORDER)
         queryset = Task.objects.filter(created_by=self.request.user.pk).order_by(order_by)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskList, self).get_context_data(**kwargs)
+        context['tag_list'] = Tag.objects.all()
+        return context
+
+
+class TaskListByTag(ListView, LoginRequiredMixin):
+    context_object_name = 'task_list'
+
+    ORDER_BY = {
+        'due_date': '-due_date',
+        'created_at': '-created_at'
+    }
+    DEFAULT_ORDER = 'pk'
+
+    def get_queryset(self):
+        tag = self.kwargs['tag']
+        queryset = Task.objects.filter(created_by=self.request.user.pk, tag=Tag.objects.get(title=tag))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskListByTag, self).get_context_data(**kwargs)
+        context['tag_list'] = Tag.objects.all()
+        return context
+
 
 class TaskDetail(DetailView, LoginRequiredMixin):
     model = Task

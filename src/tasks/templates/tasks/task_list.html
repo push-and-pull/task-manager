@@ -6,6 +6,12 @@
 
 {% block content %}
     <h1 class="page-header">My tasks</h1>
+    <div>
+        <ul>Tags</ul>
+        {% for tag in tag_list %}
+         <li><a href="{% url 'tasks:by_tag' tag.title %}">{{ tag.title }}</a></li>
+        {% endfor %}
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>
