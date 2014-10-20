@@ -5,22 +5,22 @@ from django import forms
 
 
 class TaskCreateForm(forms.ModelForm):
-    tags = forms.CharField()
+    tag_set = forms.CharField()
 
     class Meta:
         model = Task
-        fields = ('title', 'description', 'status', 'due_date', 'tags')
+        fields = ('title', 'description', 'status', 'due_date', 'tag_set')
 
-    def clean(self):
-        import ipdb
-        ipdb.set_trace()
-        data_tags = self.cleaned_data['tags']
-        tag_list = data_tags.split(',')
-        for tag in tag_list:
-            tag = tag.strip(' ')
+    def clean_tag_set(self):
+        tag_list = self.cleaned_data['tag_set'].split(',')
+        result = list()
+        for tag_title in tag_list:
+            tag_title = tag_title.strip(' ')
             try:
-                tag_object = Tag.objects.get(title=tag)
+                Tag.objects.get(title=tag_title)
             except Tag.DoesNotExist:
-                tag_object = Tag(title=tag)
+                tag_object = Tag(title=tag_title)
                 tag_object.save()
-        self.save()
+            result.append(tag_title)
+        return result
+

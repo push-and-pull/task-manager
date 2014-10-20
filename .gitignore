@@ -18,5 +18,5 @@ settings_local.py
 # default database
 *.sqlite3
 
-# IDE files
+#IDE files
 /.idea/*
