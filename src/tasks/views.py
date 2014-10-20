@@ -2,6 +2,7 @@
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView, DetailView, View
@@ -14,6 +15,16 @@ class LoginRequiredMixin(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+
+class UserSpecificTaskView(LoginRequiredMixin):
+
+    def dispatch(self, *args, **kwargs):
+        object = self.get_object()
+
+        if object.created_by.pk != self.request.user.pk:
+            return HttpResponseForbidden('Access not allowed')
+        return super(UserSpecificTaskView, self).dispatch(*args, **kwargs)
 
 
 class TaskCreate(CreateView, LoginRequiredMixin):
@@ -52,6 +63,6 @@ class TaskList(ListView, LoginRequiredMixin):
         return queryset
 
 
-class TaskDetail(DetailView, LoginRequiredMixin):
+class TaskDetail(DetailView, UserSpecificTaskView):
     model = Task
     context_object_name = 'task'

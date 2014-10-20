@@ -30,7 +30,7 @@ class Task(models.Model):
         return u'{0} {1}'.format(self.pk, self.title)
 
     def get_absolute_url(self):
-        return reverse('tasks:task_detail', self.pk)
+        return reverse('tasks:task_detail', args=(self.pk,))
 
     def clean(self):
         if self.due_date <= timezone.now().date():
