@@ -106,9 +106,6 @@ class TasksListTests(BaseTestCase):
 
 class CreateTaskTests(BaseTestCase):
 
-    def setUp(self):
-        super(CreateTaskTests, self).setUp()
-
     def tearDown(self):
         super(CreateTaskTests, self).tearDown()
         Task.objects.all().delete()
@@ -118,7 +115,7 @@ class CreateTaskTests(BaseTestCase):
             'title': 'New task',
             'description': 'test',
             'status': Task.TASK_STATUS.OPEN,
-            'due_date': '10/29/2014',
+            'due_date': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%m/%d/%Y'),
         }
         task_data.update(kwargs)
         return task_data
@@ -134,7 +131,7 @@ class CreateTaskTests(BaseTestCase):
             title=task_data['title'],
             description=task_data['description'],
             status=task_data['status'],
-            due_date=datetime.date(2014, 10, 29)
+            due_date=datetime.datetime.now().date() + datetime.timedelta(days=1)
         )
 
     def test_anonymous_user(self):
@@ -170,7 +167,7 @@ class EditTaskTests(BaseTestCase):
             'title': 'New task',
             'description': 'test',
             'status': Task.TASK_STATUS.RESOLVED,
-            'due_date': '10/29/2014',
+            'due_date': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%m/%d/%Y'),
         }
         task_data.update(kwargs)
         return task_data
@@ -187,7 +184,7 @@ class EditTaskTests(BaseTestCase):
             title=task_data['title'],
             description=task_data['description'],
             status=task_data['status'],
-            due_date=datetime.date(2014, 10, 29)
+            due_date=datetime.datetime.now().date() + datetime.timedelta(days=1)
         )
 
     def test_user_cannot_edit_oether_user_task(self):
