@@ -77,8 +77,11 @@ class TaskListByTag(ListView, LoginRequiredMixin):
     DEFAULT_ORDER = 'pk'
 
     def get_queryset(self):
+        order = self.request.GET.get('order_by')
+        order_by = self.ORDER_BY.get(order, self.DEFAULT_ORDER)
         tag = self.kwargs['tag']
-        queryset = Task.objects.filter(created_by=self.request.user.pk, tag=Tag.objects.get(title=tag))
+        queryset = Task.objects.filter(created_by=self.request.user.pk,
+                                       tag=Tag.objects.get(title=tag)).order_by(order_by)
         return queryset
 
     def get_context_data(self, **kwargs):

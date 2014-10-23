@@ -15,6 +15,10 @@
         <p class="text-primary">{{ task.due_date }}</p>
         <h4>Created by</h4>
         <p class="text-primary">{{ task.created_by.email}}</p>
+        <h4>Tags:</h4>
+        {% for tag in task.tag_set.all %}
+            <a href="{% url 'tasks:by_tag' tag.title %}">{{ tag.title }}</a>,
+        {% endfor %}
         <hr>
         <a href="{% url 'tasks:task_edit' task.pk %}" class="btn btn-primary">Edit task</a>
     </div>
