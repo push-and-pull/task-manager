@@ -39,8 +39,8 @@ class UserRegisterTestCase(TestCase):
 
     def test_form_valid_data_redirects_to_tasks_page(self):
         response = self.client.post(reverse('users:sign_up'), self.data_valid)
-        #fixme redirect should be tested not in that cheated way.
-        self.assertIn('/tasks', response.url)
+
+        self.assertRedirects(response, reverse('users:login'))
 
 
 class UserLogInTestCase(TestCase):
@@ -77,7 +77,7 @@ class UserLogoutTestCase(TestCase):
         user = User.objects.create_user(**self.valid_data)
         self.user = user
         self.client.post(reverse('users:login'), data=self.valid_data)
-    
+
     def tearDown(self):
         self.user.delete()
 

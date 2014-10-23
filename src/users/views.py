@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 def user_register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
+
         if not form.is_valid():
             return render(request, 'sign_up_or_login.html', {
                 'form': form,
