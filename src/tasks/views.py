@@ -2,21 +2,32 @@
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic import ListView, DetailView
 from tasks.forms import TaskCreateForm
-import ipdb
+
+from django.views.generic import ListView, DetailView, View
 
 
 from tasks.models import Task, Tag
 
 
-class LoginRequiredMixin(object):
+class LoginRequiredMixin(View):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+
+class UserSpecificTaskView(LoginRequiredMixin):
+
+    def dispatch(self, *args, **kwargs):
+        object = self.get_object()
+
+        if object.created_by.pk != self.request.user.pk:
+            return HttpResponseForbidden('Access not allowed')
+        return super(UserSpecificTaskView, self).dispatch(*args, **kwargs)
 
 
 class TaskCreate(CreateView, LoginRequiredMixin):
@@ -44,7 +55,7 @@ class TaskCreate(CreateView, LoginRequiredMixin):
         return super(TaskCreate, self).form_valid(form)
 
 
-class TaskEdit(UpdateView, LoginRequiredMixin):
+class TaskEdit(UpdateView, UserSpecificTaskView):
     model = Task
     form_class = TaskCreateForm
     template_name_suffix = '_create_form'
@@ -125,6 +136,6 @@ class TaskListByTag(ListView, LoginRequiredMixin):
         return context
 
 
-class TaskDetail(DetailView, LoginRequiredMixin):
+class TaskDetail(DetailView, UserSpecificTaskView):
     model = Task
     context_object_name = 'task'
