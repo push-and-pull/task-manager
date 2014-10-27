@@ -79,6 +79,8 @@ class TaskEdit(UpdateView, LoginRequiredMixin):
 class TaskList(ListView, LoginRequiredMixin):
     context_object_name = 'task_list'
 
+    paginate_by = 10
+
     ORDER_BY = {
         'due_date': '-due_date',
         'created_at': '-created_at'
@@ -94,11 +96,13 @@ class TaskList(ListView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super(TaskList, self).get_context_data(**kwargs)
         context['tag_list'] = Tag.objects.all()
+        context['order_by'] = self.request.GET.get('order_by')
         return context
 
 
 class TaskListByTag(ListView, LoginRequiredMixin):
     context_object_name = 'task_list'
+    paginate_by = 10
 
     ORDER_BY = {
         'due_date': '-due_date',
@@ -117,6 +121,7 @@ class TaskListByTag(ListView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super(TaskListByTag, self).get_context_data(**kwargs)
         context['tag_list'] = Tag.objects.all()
+        context['order_by'] = self.request.GET.get('order_by')
         return context
 
 
