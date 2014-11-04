@@ -7,15 +7,15 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0001_initial'),
+        ('spaces', '__first__'),
         ('tasks', '0003_tag'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='task',
-            name='assigned_to',
-            field=models.ForeignKey(related_name=b'assigned_to', default=models.ForeignKey(related_name=b'created_by', verbose_name=b'Created by', to='users.User'), verbose_name=b'Assigned to', to='users.User'),
+            name='space',
+            field=models.ForeignKey(verbose_name=b'space', blank=True, to='spaces.Space', null=True),
             preserve_default=True,
         ),
         migrations.AlterField(

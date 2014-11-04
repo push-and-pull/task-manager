@@ -21,8 +21,8 @@ class Task(models.Model):
 
     created_by = models.ForeignKey(to=User, verbose_name='Created by', related_name='created_by')
     assigned_to = models.ForeignKey(to=User, verbose_name='Assigned to', related_name='assigned_to',
-                                    default=created_by)
-    space = models.ForeignKey(to=Space, verbose_name='space', null=True)
+                                    null=True)
+    space = models.ForeignKey(to=Space, verbose_name='space', blank=True, null=True)
     title = models.CharField(verbose_name='Title', max_length=200)
     description = models.TextField(verbose_name='Description', blank=True)
     status = models.IntegerField(choices=TASK_STATUS.VALUES.items())
