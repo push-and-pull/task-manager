@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'task_manager',
     'users',
     'tasks',
+    'spaces'
 )
 
 MIDDLEWARE_CLASSES = (

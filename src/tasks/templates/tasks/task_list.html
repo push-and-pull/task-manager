@@ -6,13 +6,35 @@
 
 {% block content %}
     <h1 class="page-header">My tasks</h1>
+    <div>
+        <ul>Tags</ul>
+        {% for tag in tag_list %}
+         <li><a href="{% url 'tasks:by_tag' tag.title %}">{{ tag.title }}</a></li>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}&order_by={{order_by}}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}&order_by={{order_by}}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Title</th>
-                <th><a href="{% url 'tasks:task_list' %}?order_by=created_at">Created at</a></th>
-                <th><a href="{% url 'tasks:task_list' %}?order_by=due_date">Due date</a></th>
+                <th><a href="{{ request.path }}?order_by=created_at">Created at</a></th>
+                <th><a href="{{ request.path }}?order_by=due_date">Due date</a></th>
             </tr>
         </thead>
         <tbody>
